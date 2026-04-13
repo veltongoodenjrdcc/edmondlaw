@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -l \"data-year\" /c/Users/velto/OneDrive/Documents/edmondlaw/*.html /c/Users/velto/OneDrive/Documents/edmondlaw/blog/*.html)",
+      "Bash(grep -l \"assets/css/styles.css\" /c/Users/velto/OneDrive/Documents/edmondlaw/*.html /c/Users/velto/OneDrive/Documents/edmondlaw/blog/*.html)",
+      "Bash(grep -l \"main.js\" /c/Users/velto/OneDrive/Documents/edmondlaw/*.html /c/Users/velto/OneDrive/Documents/edmondlaw/blog/*.html)"
+    ]
+  }
+}
