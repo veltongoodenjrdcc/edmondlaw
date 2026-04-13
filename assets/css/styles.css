@@ -2109,7 +2109,7 @@ section {
   .menu-btn { display: flex; }
 
   .nav .nav-logo {
-    width: clamp(168px, 46vw, 210px);
+    width: clamp(162px, 44vw, 202px);
   }
 
   .nav-links {
