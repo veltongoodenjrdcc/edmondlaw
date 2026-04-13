@@ -997,9 +997,9 @@ section {
   color: var(--gold);
 }
 
-/* Full-page attorney layout (team.html) */
-.team-intro {
-  padding: clamp(1.75rem, 3vw, 2.5rem) 0 clamp(1rem, 2vw, 1.5rem);
+/* Short interior-page lead-in between a page hero and the main body content */
+.page-intro {
+  padding: clamp(2rem, 6vw, 4rem) 0 clamp(1rem, 2.25vw, 1.5rem);
 }
 
 .attorney {
@@ -2006,6 +2006,14 @@ section {
 
 /* ── 25. RESPONSIVE — TABLET 768px ─────────────────────────── */
 @media (min-width: 768px) {
+  .page-intro + section {
+    padding-top: clamp(3rem, 4.75vw, 4.75rem);
+  }
+
+  .page-intro + section .attorney:first-of-type {
+    padding-top: 0;
+  }
+
   /* Trust strip */
   .trust-strip__grid {
     grid-template-columns: repeat(4, 1fr);
