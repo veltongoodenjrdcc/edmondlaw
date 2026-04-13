@@ -998,6 +998,10 @@ section {
 }
 
 /* Full-page attorney layout (team.html) */
+.team-intro {
+  padding: clamp(1.75rem, 3vw, 2.5rem) 0 clamp(1rem, 2vw, 1.5rem);
+}
+
 .attorney {
   display: grid;
   grid-template-columns: 1fr;
@@ -1609,6 +1613,11 @@ section {
 .newsletter-form .form-group input {
   display: block;
   min-height: 100%;
+}
+
+/* Temporary hidden state for sections pending activation */
+[data-feature-state="pending"] {
+  display: none !important;
 }
 
 /* Map strip */

@@ -183,6 +183,32 @@
       if (err) err.remove();
     };
 
+    const getFieldValue = name => {
+      const field = contactForm.elements[name];
+      return field && typeof field.value === 'string' ? field.value.trim() : '';
+    };
+
+    const buildWhatsAppMessage = () => {
+      const phone = getFieldValue('phone');
+      const area = getFieldValue('area');
+      const message = getFieldValue('message');
+      const lines = [
+        'Hello Edmond Law,',
+        '',
+        'I would like to make an enquiry through your website.',
+        '',
+        `Name: ${getFieldValue('name')}`,
+        `Email: ${getFieldValue('email')}`
+      ];
+
+      if (phone) lines.push(`Phone / WhatsApp: ${phone}`);
+      if (area) lines.push(`Area of Law: ${area}`);
+
+      lines.push('', 'Message:', message);
+
+      return lines.join('\n');
+    };
+
     // Inline validation on blur
     $$('input, select, textarea', contactForm).forEach(field => {
       field.addEventListener('blur', () => {
@@ -221,12 +247,34 @@
         return;
       }
 
+      const submitMode = contactForm.dataset.submitMode;
       const btn = $('[type="submit"]', contactForm);
-      const originalText = btn.innerHTML;
-      btn.disabled = true;
-      btn.textContent = 'Sending...';
+      const originalText = btn ? btn.innerHTML : '';
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = submitMode === 'whatsapp' ? 'Opening WhatsApp...' : 'Sending...';
+      }
 
       try {
+        if (submitMode === 'whatsapp') {
+          const whatsappNumber = (contactForm.dataset.whatsappNumber || '').replace(/\D/g, '');
+          if (!whatsappNumber) {
+            throw new Error('Missing WhatsApp number');
+          }
+
+          const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildWhatsAppMessage())}`;
+          const openedWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+          if (!openedWindow) {
+            window.location.href = whatsappUrl;
+          }
+
+          statusEl.className = 'form-status form-status--success';
+          statusEl.textContent = 'WhatsApp opened with your enquiry pre-filled. Please review the message and tap send.';
+          return;
+        }
+
         const res = await fetch(contactForm.action, {
           method: 'POST',
           body: new FormData(contactForm),
@@ -242,10 +290,14 @@
         }
       } catch {
         statusEl.className = 'form-status form-status--error';
-        statusEl.textContent = 'Something went wrong. Please call us at 876-827-3362 or email tamica@edmondlaw.org.';
+        statusEl.textContent = submitMode === 'whatsapp'
+          ? 'We could not open WhatsApp. Please call us at 876-827-3362 or use the WhatsApp button on this page.'
+          : 'Something went wrong. Please call us at 876-827-3362 or email tamica@edmondlaw.org.';
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = originalText;
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         statusEl.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
       }
