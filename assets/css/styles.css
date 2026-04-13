@@ -2110,6 +2110,7 @@ section {
 
   .nav .nav-logo {
     width: clamp(162px, 44vw, 202px);
+    margin-left: 0.25rem;
   }
 
   .nav-links {
