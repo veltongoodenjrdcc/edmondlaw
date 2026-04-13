@@ -264,16 +264,33 @@
     return trimmed || '/';
   };
 
-  const currentPath = normalizePath(window.location.pathname);
-  $$('.nav-links a').forEach(link => {
+  const navInternalLinks = $$('.nav-links a').filter(link => {
+    const href = link.getAttribute('href');
+    return href && !href.startsWith('http') && !href.startsWith('tel:') && !href.startsWith('mailto:') && !href.startsWith('#');
+  });
+
+  const homeLink = navInternalLinks.find(link => normalizePath(new URL(link.getAttribute('href'), window.location.href).pathname) === normalizePath(new URL('.', window.location.href).pathname))
+    || navInternalLinks[0];
+
+  const siteRootPath = homeLink
+    ? normalizePath(new URL(homeLink.getAttribute('href'), window.location.href).pathname)
+    : '/';
+
+  const toSitePath = path => {
+    const normalized = normalizePath(path);
+    if (siteRootPath !== '/' && (normalized === siteRootPath || normalized.startsWith(`${siteRootPath}/`))) {
+      const relativePath = normalized.slice(siteRootPath.length);
+      return relativePath || '/';
+    }
+    return normalized;
+  };
+
+  const currentPath = toSitePath(window.location.pathname);
+  navInternalLinks.forEach(link => {
     link.removeAttribute('aria-current');
 
     const href = link.getAttribute('href');
-    if (!href || href.startsWith('http') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('#')) {
-      return;
-    }
-
-    const linkPath = normalizePath(new URL(href, window.location.origin).pathname);
+    const linkPath = toSitePath(new URL(href, window.location.href).pathname);
     const isCurrent = linkPath === '/'
       ? currentPath === '/'
       : currentPath === linkPath || currentPath.startsWith(`${linkPath}/`);
