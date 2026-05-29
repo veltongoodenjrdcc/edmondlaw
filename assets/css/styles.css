@@ -979,6 +979,27 @@ section {
   transition: transform 0.8s var(--ease);
 }
 
+.team-photo__stock[hidden] {
+  display: none;
+}
+
+.team-photo__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 28% 18%, rgba(216, 178, 116, 0.22), transparent 30%),
+    linear-gradient(145deg, #1a3658, var(--steel));
+  color: rgba(247,244,237,0.78);
+}
+
+.team-photo__placeholder i {
+  font-size: clamp(4rem, 10vw, 6.5rem);
+  line-height: 1;
+}
+
 .team-card:hover .team-card__photo img {
   transform: scale(1.04);
 }
@@ -1287,6 +1308,25 @@ section {
 
 .footer__bottom p { color: rgba(247,244,237,0.42); font-size: 0.78rem; }
 .footer__bottom a { color: var(--steel-light); }
+
+.footer__bottom .footer__credit {
+  color: rgba(247,244,237,0.72);
+}
+
+.footer__credit span,
+.footer__credit a {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.footer__credit a {
+  text-decoration: none;
+}
+
+.footer__credit a:hover {
+  color: var(--steel-light);
+  text-decoration: underline;
+}
 
 /* ── 17. ABOUT PAGE ─────────────────────────────────────────── */
 .about-story {
